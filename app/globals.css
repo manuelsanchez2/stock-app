@@ -3,19 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 249, 250, 251;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 17, 17, 17;
+  --background-rgb: 255, 255, 255;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: "Neue Haas Grotesk Text", "Helvetica Neue", "IBM Plex Sans", sans-serif;
+  letter-spacing: -0.005em;
 }
 
 @layer utilities {
@@ -23,4 +19,3 @@ body {
     text-wrap: balance;
   }
 }
-

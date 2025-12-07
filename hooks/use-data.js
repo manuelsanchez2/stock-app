@@ -13,7 +13,7 @@ export function useData(remoteStorage) {
   // State
   const [items, setItems] = useState([])
   const [itemsList, setItemsList] = useState([])
-  const [settings, setSettings] = useState({ theme: 'light', language: 'en' })
+  const [settings, setSettings] = useState({ theme: 'light', language: 'de' })
   const [isLoading, setIsLoading] = useState(true)
   const [isConnected, setIsConnected] = useState(false)
 
@@ -45,7 +45,7 @@ export function useData(remoteStorage) {
 
   // Load all data when connected
   const loadAllData = useCallback(async () => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       setIsLoading(false)
       return
     }
@@ -54,11 +54,11 @@ export function useData(remoteStorage) {
 
     try {
       // Load items list (metadata)
-      const list = await remoteStorage.mymodule.getItemsList()
+      const list = await remoteStorage.einkauf.getItemsList()
       setItemsList(list)
 
       // Load settings
-      const loadedSettings = await remoteStorage.mymodule.loadSettings()
+      const loadedSettings = await remoteStorage.einkauf.loadSettings()
       setSettings(loadedSettings)
     } catch (error) {
       console.error("Error loading data:", error)
@@ -69,7 +69,7 @@ export function useData(remoteStorage) {
 
   // Initial load
   useEffect(() => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       setIsLoading(false)
       return
     }
@@ -108,7 +108,7 @@ export function useData(remoteStorage) {
    * @param {Object} item - The item to save
    */
   const saveItem = useCallback(async (item) => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       throw new Error("RemoteStorage is not connected. Please connect to RemoteStorage.")
     }
 
@@ -116,10 +116,10 @@ export function useData(remoteStorage) {
 
     try {
       // Save to RemoteStorage
-      await remoteStorage.mymodule.saveItem(item)
+      await remoteStorage.einkauf.saveItem(item)
 
       // Reload items list to get updated metadata
-      const updatedList = await remoteStorage.mymodule.getItemsList()
+      const updatedList = await remoteStorage.einkauf.getItemsList()
       setItemsList(updatedList)
     } catch (error) {
       console.error("Error saving item:", error)
@@ -139,12 +139,12 @@ export function useData(remoteStorage) {
    * @returns {Promise<Object|null>}
    */
   const loadItem = useCallback(async (id) => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       return null
     }
 
     try {
-      return await remoteStorage.mymodule.loadItem(id)
+      return await remoteStorage.einkauf.loadItem(id)
     } catch (error) {
       console.error("Error loading item:", error)
       return null
@@ -156,17 +156,17 @@ export function useData(remoteStorage) {
    * @param {string} id - The item ID
    */
   const deleteItem = useCallback(async (id) => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       throw new Error("RemoteStorage is not connected")
     }
 
     isSavingRef.current = true
 
     try {
-      await remoteStorage.mymodule.deleteItem(id)
+      await remoteStorage.einkauf.deleteItem(id)
 
       // Reload items list
-      const updatedList = await remoteStorage.mymodule.getItemsList()
+      const updatedList = await remoteStorage.einkauf.getItemsList()
       setItemsList(updatedList)
     } catch (error) {
       console.error("Error deleting item:", error)
@@ -185,7 +185,7 @@ export function useData(remoteStorage) {
    * @param {Object} newSettings - Settings object to save
    */
   const saveSettings = useCallback(async (newSettings) => {
-    if (!remoteStorage?.mymodule || !isConnected) {
+    if (!remoteStorage?.einkauf || !isConnected) {
       throw new Error("RemoteStorage is not connected")
     }
 
@@ -196,7 +196,7 @@ export function useData(remoteStorage) {
       setSettings(newSettings)
 
       // Save to RemoteStorage
-      await remoteStorage.mymodule.saveSettings(newSettings)
+      await remoteStorage.einkauf.saveSettings(newSettings)
     } catch (error) {
       console.error("Error saving settings:", error)
       // Reload to get correct state
@@ -229,4 +229,3 @@ export function useData(remoteStorage) {
     reload: loadAllData
   }
 }
-

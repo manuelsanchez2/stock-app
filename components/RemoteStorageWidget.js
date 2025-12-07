@@ -8,8 +8,9 @@ import { useEffect, useState, useRef } from "react"
  *
  * @param {Object} props
  * @param {Object} props.remoteStorage - RemoteStorage instance
+ * @param {number} [props.refreshKey] - Forces the widget to re-attach
  */
-export default function RemoteStorageWidget({ remoteStorage }) {
+export default function RemoteStorageWidget({ remoteStorage, refreshKey = 0 }) {
   const [widget, setWidget] = useState(null)
   const initializedRef = useRef(false)
 
@@ -57,6 +58,12 @@ export default function RemoteStorageWidget({ remoteStorage }) {
       }
     }
 
+    // Clear any previous widget nodes so re-attach works reliably
+    const container = document.getElementById("remotestorage-widget-container")
+    if (container) {
+      container.innerHTML = ""
+    }
+
     loadWidget()
 
     return () => {
@@ -65,7 +72,7 @@ export default function RemoteStorageWidget({ remoteStorage }) {
         // Widget cleanup if needed
       }
     }
-  }, [remoteStorage])
+  }, [remoteStorage, refreshKey])
 
   // Always render the container
   return (
@@ -80,4 +87,3 @@ export default function RemoteStorageWidget({ remoteStorage }) {
     />
   )
 }
-
